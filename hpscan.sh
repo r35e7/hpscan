@@ -3,7 +3,7 @@
 trap ctrl_c INT
 
 function ctrl_c() {
-        echo "** Saliendo! CTRL-C"
+        echo "** Exiting! CTRL-C"
         exit 1
 }
 
@@ -12,11 +12,11 @@ function scan_ports() {
 	for port in {1..65535}; do
 		timeout 0.2 bash -c "</dev/tcp/$host/$port &>/dev/null" 2>/dev/null
 		if [ $? -eq 0 ]; then
-			echo "El puerto $port está abierto en $host"
+			echo "The port $port is open on $host"
 		else
 			 n=$(($port % 10000))
 			 if [ $n == 0 ]; then
-			 	echo "Escaneando puerto $port"
+			 	echo "Scaning.. $port"
 			 fi
 		fi
 	done;wait
@@ -28,5 +28,5 @@ if [ $1 ]; then
 		timeout 1 ping -c 1 $ip$i > /dev/null && echo "Ip $ip$i UP" && scan_ports $ip$i &
 	done;wait
 else
-	echo -e "\n[i] Uso ./hostDiscover <ip>. [ ex: ./ho0stDiscover 192.168.1.1]"
+	echo -e "\n[i] Usage ./hpscan.sh <ip>. [ ex: ./hpscan.sh 192.168.1.1]"
 fi
